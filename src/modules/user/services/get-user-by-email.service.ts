@@ -1,5 +1,5 @@
-import { UserDatabaseRepository } from "../repositories/user-database.repository";
 import { Injectable, NotFoundException } from "@nestjs/common";
+import { InMemoryUserRepository } from "../repositories/in-memory-user.repository";
 
 type GetUserByEmailServiceRequest = {
   email: string;
@@ -7,7 +7,7 @@ type GetUserByEmailServiceRequest = {
 
 @Injectable()
 class GetUserByEmailService {
-  constructor(private readonly userRepository: UserDatabaseRepository) {}
+  constructor(private readonly userRepository: InMemoryUserRepository) {}
 
   public async execute({ email }: GetUserByEmailServiceRequest) {
     const user = await this.userRepository.getUserByEmail(email);

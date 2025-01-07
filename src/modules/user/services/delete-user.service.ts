@@ -1,5 +1,5 @@
-import { UserDatabaseRepository } from "../repositories/user-database.repository";
 import { Injectable, NotFoundException } from "@nestjs/common";
+import { InMemoryUserRepository } from "../repositories/in-memory-user.repository";
 
 type DeleteUserServiceRequest = {
   id: number;
@@ -7,7 +7,7 @@ type DeleteUserServiceRequest = {
 
 @Injectable()
 class DeleteUserService {
-  constructor(private readonly userRepository: UserDatabaseRepository) {}
+  constructor(private readonly userRepository: InMemoryUserRepository) {}
 
   public async execute({ id }: DeleteUserServiceRequest) {
     const userExists = await this.userRepository.getUserById(id);

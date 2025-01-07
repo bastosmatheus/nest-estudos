@@ -3,7 +3,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from "@nestjs/common";
-import { UserDatabaseRepository } from "../repositories/user-database.repository";
+import { InMemoryUserRepository } from "../repositories/in-memory-user.repository";
 
 type UpdateUserRoleServiceRequest = {
   id: number;
@@ -12,7 +12,7 @@ type UpdateUserRoleServiceRequest = {
 
 @Injectable()
 class UpdateUserRoleService {
-  constructor(private readonly userRepository: UserDatabaseRepository) {}
+  constructor(private readonly userRepository: InMemoryUserRepository) {}
 
   public async execute({ id, id_employee }: UpdateUserRoleServiceRequest) {
     const userExists = await this.userRepository.getUserById(id);

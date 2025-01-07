@@ -1,6 +1,6 @@
 import { ConflictException, Injectable } from "@nestjs/common";
 import { hash } from "bcrypt";
-import { UserDatabaseRepository } from "../repositories/user-database.repository";
+import { InMemoryUserRepository } from "../repositories/in-memory-user.repository";
 
 type CreateUserServiceRequest = {
   name: string;
@@ -10,7 +10,7 @@ type CreateUserServiceRequest = {
 
 @Injectable()
 class CreateUserService {
-  constructor(private readonly userRepository: UserDatabaseRepository) {}
+  constructor(private readonly userRepository: InMemoryUserRepository) {}
 
   public async execute({ name, email, password }: CreateUserServiceRequest) {
     const userAlreadyExists = await this.userRepository.getUserByEmail(email);

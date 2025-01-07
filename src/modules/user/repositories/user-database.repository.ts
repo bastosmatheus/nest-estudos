@@ -1,7 +1,8 @@
-import { User, Prisma } from "@prisma/client";
+import { User } from "@prisma/client";
 import { UserRepository } from "./user.repository";
 import { DatabaseService } from "src/database/database.service";
 import { Injectable } from "@nestjs/common";
+import { CreateUserDto } from "../dtos/create-user.dto";
 
 @Injectable()
 class UserDatabaseRepository implements UserRepository {
@@ -33,7 +34,7 @@ class UserDatabaseRepository implements UserRepository {
     return user;
   }
 
-  public async createUser(user: Prisma.UserCreateInput): Promise<User> {
+  public async createUser(user: CreateUserDto): Promise<User> {
     const userCreated = await this.databaseService.user.create({
       data: user,
     });

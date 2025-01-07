@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { hash } from "bcrypt";
-import { UserDatabaseRepository } from "../repositories/user-database.repository";
+import { InMemoryUserRepository } from "../repositories/in-memory-user.repository";
 
 type UpdateUserPasswordServiceRequest = {
   id: number;
@@ -9,7 +9,7 @@ type UpdateUserPasswordServiceRequest = {
 
 @Injectable()
 class UpdateUserPasswordService {
-  constructor(private readonly userRepository: UserDatabaseRepository) {}
+  constructor(private readonly userRepository: InMemoryUserRepository) {}
 
   public async execute({ id, password }: UpdateUserPasswordServiceRequest) {
     const userExists = await this.userRepository.getUserById(id);
