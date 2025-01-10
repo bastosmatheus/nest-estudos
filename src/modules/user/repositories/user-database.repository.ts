@@ -2,7 +2,7 @@ import { User } from "@prisma/client";
 import { UserRepository } from "./user.repository";
 import { DatabaseService } from "src/database/database.service";
 import { Injectable } from "@nestjs/common";
-import { CreateUserDto } from "../dtos/create-user.dto";
+import { CreateUserDto } from "src/schemas/user-schemas";
 
 @Injectable()
 class UserDatabaseRepository implements UserRepository {
@@ -49,19 +49,6 @@ class UserDatabaseRepository implements UserRepository {
       },
       data: {
         password: newPassword,
-      },
-    });
-
-    return userUpdated;
-  }
-
-  public async updateRole(id_employee: number): Promise<User> {
-    const userUpdated = await this.databaseService.user.update({
-      where: {
-        id: id_employee,
-      },
-      data: {
-        role: "Admin",
       },
     });
 

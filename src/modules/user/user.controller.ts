@@ -1,16 +1,29 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
-import { CreateUserDto } from "./dtos/create-user.dto";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UsePipes,
+} from "@nestjs/common";
 import {
   CreateUserService,
   GetUserByEmailService,
   GetUserByIdService,
   GetUsersService,
   UpdateUserPasswordService,
-  UpdateUserRoleService,
 } from "./services";
 import { DeleteUserService } from "./services/delete-user.service";
-import { UpdateUserPasswordDto } from "./dtos/update-user-password.dto";
-import { UpdateUserRoleDto } from "./dtos/update-user-role.dto";
+import { IsNumberParam } from "../../pipes/is-number-param.pipe";
+import { ZodValidationPipe } from "src/pipes/zod-validation.pipe";
+import {
+  CreateUserDto,
+  createUserSchema,
+  UpdateUserPasswordDto,
+  updateUserPasswordSchema,
+} from "src/schemas/user-schemas";
 
 @Controller("users")
 export class UserController {
@@ -20,7 +33,6 @@ export class UserController {
     private readonly getUserByIdService: GetUserByIdService,
     private readonly createUserService: CreateUserService,
     private readonly updateUserPasswordService: UpdateUserPasswordService,
-    private readonly updateUserRoleService: UpdateUserRoleService,
     private readonly deleteUserService: DeleteUserService
   ) {}
 
@@ -31,7 +43,7 @@ export class UserController {
     return users;
   }
 
-  @Get(":email")
+  @Get(":email/email")
   async getUserByEmail(@Param("email") email: string) {
     const users = await this.getUserByEmailService.execute({ email });
 
@@ -39,13 +51,14 @@ export class UserController {
   }
 
   @Get(":id")
-  async getUserById(@Param("id") id: number) {
+  async getUserById(@IsNumberParam("id") id: number) {
     const users = await this.getUserByIdService.execute({ id });
 
     return users;
   }
 
   @Post()
+  @UsePipes(new ZodValidationPipe(createUserSchema))
   async createUser(@Body() createUserDto: CreateUserDto) {
     const user = await this.createUserService.execute({ ...createUserDto });
 
@@ -53,24 +66,21 @@ export class UserController {
   }
 
   @Patch(":id/password")
+  @UsePipes(new ZodValidationPipe(updateUserPasswordSchema))
   async updateUserPassword(
-    @Param("id") id: number,
+    @IsNumberParam("id") id: number,
     @Body() updateUserPasswordDto: UpdateUserPasswordDto
   ) {
-    const user = await this.updateUserPasswordService.execute({ id, ...updateUserPasswordDto });
-
-    return user;
-  }
-
-  @Patch(":id/role")
-  async updateUserRole(@Param("id") id: number, @Body() updateUserRoleDto: UpdateUserRoleDto) {
-    const user = await this.updateUserRoleService.execute({ id, ...updateUserRoleDto });
+    const user = await this.updateUserPasswordService.execute({
+      id,
+      ...updateUserPasswordDto,
+    });
 
     return user;
   }
 
   @Delete(":id")
-  async deleteUser(@Param("id") id: number) {
+  async deleteUser(@IsNumberParam("id") id: number) {
     const user = await this.deleteUserService.execute({ id });
 
     return user;

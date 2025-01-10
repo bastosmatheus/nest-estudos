@@ -7,10 +7,9 @@ import {
   GetUserByIdService,
   GetUsersService,
   UpdateUserPasswordService,
-  UpdateUserRoleService,
 } from "./services";
 import { DatabaseService } from "src/database/database.service";
-import { UserDatabaseRepository } from "./repositories/user-database.repository";
+import { InMemoryUserRepository } from "./repositories/in-memory-user.repository";
 
 @Module({
   controllers: [UserController],
@@ -20,10 +19,10 @@ import { UserDatabaseRepository } from "./repositories/user-database.repository"
     GetUserByIdService,
     CreateUserService,
     UpdateUserPasswordService,
-    UpdateUserRoleService,
     DeleteUserService,
     DatabaseService,
-    UserDatabaseRepository,
+    InMemoryUserRepository,
   ],
+  exports: [GetUserByEmailService],
 })
 export class UserModule {}

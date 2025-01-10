@@ -1,7 +1,7 @@
 import { User } from "@prisma/client";
 import { UserRepository } from "./user.repository";
 import { Injectable } from "@nestjs/common";
-import { CreateUserDto } from "../dtos/create-user.dto";
+import { CreateUserDto } from "src/schemas/user-schemas";
 
 @Injectable()
 class InMemoryUserRepository implements UserRepository {
@@ -22,7 +22,11 @@ class InMemoryUserRepository implements UserRepository {
   }
 
   public async getUserByEmail(email: string): Promise<User | null> {
-    const user = this.users.find((user) => user.email === email);
+    const user = this.users.find((user) => {
+      console.log(user.email === email);
+
+      return user.email === email;
+    });
 
     if (!user) {
       return null;
@@ -51,16 +55,6 @@ class InMemoryUserRepository implements UserRepository {
     const user = this.users[userIndex];
 
     user.password = newPassword;
-
-    return user;
-  }
-
-  public async updateRole(id_employee: number): Promise<User> {
-    const userIndex = this.users.findIndex((user) => user.id === id_employee);
-
-    const user = this.users[userIndex];
-
-    user.role = "Admin";
 
     return user;
   }

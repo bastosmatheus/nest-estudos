@@ -1,5 +1,5 @@
 import { User } from "@prisma/client";
-import { CreateUserDto } from "../dtos/create-user.dto";
+import { CreateUserDto } from "src/schemas/user-schemas";
 
 interface UserRepository {
   getUsers(): Promise<User[]>;
@@ -7,7 +7,6 @@ interface UserRepository {
   getUserByEmail(email: string): Promise<User | null>;
   createUser(user: CreateUserDto): Promise<User>;
   updatePassword(id: number, newPassword: string): Promise<User>;
-  updateRole(id_employee: number): Promise<User>;
   deleteUser(id: number): Promise<User>;
 }
 
