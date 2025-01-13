@@ -8,8 +8,8 @@ import {
   GetUsersService,
   UpdateUserPasswordService,
 } from "./services";
+import { UserDatabaseRepository } from "./repositories/user-database.repository";
 import { DatabaseService } from "src/database/database.service";
-import { InMemoryUserRepository } from "./repositories/in-memory-user.repository";
 
 @Module({
   controllers: [UserController],
@@ -20,8 +20,8 @@ import { InMemoryUserRepository } from "./repositories/in-memory-user.repository
     CreateUserService,
     UpdateUserPasswordService,
     DeleteUserService,
+    UserDatabaseRepository,
     DatabaseService,
-    InMemoryUserRepository,
   ],
   exports: [GetUserByEmailService],
 })

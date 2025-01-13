@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
-import { InMemoryUserRepository } from "../repositories/in-memory-user.repository";
+import { UserDatabaseRepository } from "../repositories/user-database.repository";
 
 @Injectable()
 class GetUsersService {
-  constructor(private readonly userRepository: InMemoryUserRepository) {}
+  constructor(private readonly userRepository: UserDatabaseRepository) {}
 
   public async execute() {
     const users = await this.userRepository.getUsers();
