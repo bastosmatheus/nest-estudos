@@ -28,7 +28,7 @@ class SignInService {
       throw new UnauthorizedException("Credenciais inválidas");
     }
 
-    const payload = { sub: user.id };
+    const payload = { sub: user.id, role: user.role };
 
     const accessToken = this.jwtService.signAsync(payload);
 

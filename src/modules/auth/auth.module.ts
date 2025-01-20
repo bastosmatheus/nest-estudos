@@ -2,11 +2,11 @@ import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { AuthController } from "./auth.controller";
 import { UserModule } from "../user/user.module";
-import { UserDatabaseRepository } from "../user/repositories/user-database.repository";
 import { DatabaseService } from "src/database/database.service";
 import { SignInService } from "./services";
 import { PassportModule } from "@nestjs/passport";
 import { JwtStrategy } from "./jwt.strategy";
+import { UserDatabaseRepository } from "../user/repositories/user-database.repository";
 
 @Module({
   imports: [
@@ -20,9 +20,9 @@ import { JwtStrategy } from "./jwt.strategy";
   ],
   providers: [
     SignInService,
-    UserDatabaseRepository,
     DatabaseService,
     JwtStrategy,
+    UserDatabaseRepository,
   ],
   controllers: [AuthController],
 })

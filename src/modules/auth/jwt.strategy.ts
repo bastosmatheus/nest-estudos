@@ -1,12 +1,13 @@
 import { Strategy } from "passport-jwt";
 import { PassportStrategy } from "@nestjs/passport";
-import { Injectable } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { ExtractJwt } from "passport-jwt";
 import { payloadSchema, PayloadToken } from "src/schemas/auth-schemas";
+import { UserDatabaseRepository } from "../user/repositories/user-database.repository";
 
 @Injectable()
 class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(private userRepository: UserDatabaseRepository) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -15,7 +16,17 @@ class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: PayloadToken) {
-    return payloadSchema.parse(payload);
+    payloadSchema.parse(payload);
+
+    const { sub } = payload;
+
+    const userExists = await this.userRepository.getUserById(sub);
+
+    if (!userExists) {
+      throw new UnauthorizedException();
+    }
+
+    return true;
   }
 }
 
