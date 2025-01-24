@@ -18,7 +18,7 @@ class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload: PayloadToken) {
     payloadSchema.parse(payload);
 
-    const { sub } = payload;
+    const { sub, role } = payload;
 
     const userExists = await this.userRepository.getUserById(sub);
 
@@ -26,7 +26,7 @@ class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException();
     }
 
-    return true;
+    return { id: sub, role };
   }
 }
 
