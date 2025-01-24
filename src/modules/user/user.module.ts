@@ -8,8 +8,8 @@ import {
   GetUsersService,
   UpdateUserPasswordService,
 } from "./services";
-import { UserDatabaseRepository } from "./repositories/user-database.repository";
 import { DatabaseService } from "src/database/database.service";
+import { UserDatabaseRepository } from "./repositories/user-database.repository";
 
 @Module({
   controllers: [UserController],
@@ -23,6 +23,5 @@ import { DatabaseService } from "src/database/database.service";
     UserDatabaseRepository,
     DatabaseService,
   ],
-  exports: [GetUserByEmailService],
 })
 export class UserModule {}

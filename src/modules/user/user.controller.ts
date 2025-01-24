@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
   UsePipes,
 } from "@nestjs/common";
 import {
@@ -24,6 +25,10 @@ import {
   UpdateUserPasswordDto,
   updateUserPasswordSchema,
 } from "src/schemas/user-schemas";
+import { JwtAuthGuard } from "../auth/jwt-auth.guard";
+import { Roles } from "src/decorators/roles.decorators";
+import { Role } from "src/modules/role/enums/role.enums";
+import { RolesGuard } from "../role/role.guard";
 
 @Controller("users")
 export class UserController {
@@ -66,10 +71,12 @@ export class UserController {
   }
 
   @Patch(":id/password")
-  @UsePipes(new ZodValidationPipe(updateUserPasswordSchema))
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Atendente)
   async updateUserPassword(
     @IsNumberParam("id") id: number,
-    @Body() updateUserPasswordDto: UpdateUserPasswordDto
+    @Body(new ZodValidationPipe(updateUserPasswordSchema))
+    updateUserPasswordDto: UpdateUserPasswordDto
   ) {
     const user = await this.updateUserPasswordService.execute({
       id,
@@ -80,6 +87,8 @@ export class UserController {
   }
 
   @Delete(":id")
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   async deleteUser(@IsNumberParam("id") id: number) {
     const user = await this.deleteUserService.execute({ id });
 
