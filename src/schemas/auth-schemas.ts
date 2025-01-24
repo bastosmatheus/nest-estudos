@@ -21,6 +21,7 @@ type SigninUserDto = z.infer<typeof signinUserSchema>;
 
 const payloadSchema = z.object({
   sub: z.number(),
+  role: z.string(),
 });
 
 type PayloadToken = z.infer<typeof payloadSchema>;
